@@ -1,1 +1,4 @@
 credentials.json
+.DS_Store
+token.json
+AA_db.sqlite
