@@ -57,22 +57,24 @@ def main():
 
         conn = sqlite3.connect('AA_db.sqlite')
         cur = conn.cursor()
-        cur.execute(f'INSERT INTO applications (number) values ({counter})')
-        conn.commit()
 
         cur.execute('SELECT * FROM applications')
         data = cur.fetchall()
+        
+        current_total = data[-1][2]
+
+        cur.execute(f'INSERT INTO applications (number) values ({counter})')
+        conn.commit()
 
         cur.execute('SELECT * FROM applications WHERE ID = (SELECT MAX(ID) FROM applications)')
         data = cur.fetchall()
 
-        print(f"""
-            Total Applications: {len(data)}
-            Applications From Yesterday: {counter}
-            Total New Applications: {counter - data[0][2]}
-        """)
-        if counter - data[0][2] < 10:
-            print("APPLY MORE")
+        new_total = data[0][2]
+        
+        net_gain = new_total - current_total
+
+        if net_gain < 10:
+            print(f"APPLY MORE!!!. YOU ONLY APPLIED TO {net_gain} TODAY!!!")     
 
     except HttpError as err:
         print(err)

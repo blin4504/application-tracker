@@ -7,18 +7,18 @@ if __name__ == '__main__':
     # conn.commit()
     
 
-    # cur.execute('INSERT INTO applications (number) values (10)')
+    cur.execute('INSERT INTO applications (number) values (35)')
+    conn.commit()
+
+    # cur.execute('SELECT * FROM applications')
+    # data = cur.fetchall()
+    # print(data)
+    # cur.execute("delete from applications")
     # conn.commit()
 
     # cur.execute('SELECT * FROM applications')
     # data = cur.fetchall()
     # print(data)
-    cur.execute("delete from applications")
-    conn.commit()
-
-    cur.execute('SELECT * FROM applications')
-    data = cur.fetchall()
-    print(data)
 
 
     conn.close()
