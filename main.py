@@ -9,14 +9,17 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 import sqlite3
+from dotenv import load_dotenv
+from mail import send_email
+
+load_dotenv()
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 
 # The ID and range of a sample spreadsheet.
-SPREADSHEET_ID = '1rAsGas46T1xOOlNz97D02BGaBdqeBhxx-avSd6kluMg'
+SPREADSHEET_ID = os.getenv('SHEET_ID')
 RANGE_NAME = 'Sheet1!B:C'
-
 
 def main():
     """Shows basic usage of the Sheets API.
@@ -60,6 +63,7 @@ def main():
 
         cur.execute('SELECT * FROM applications')
         data = cur.fetchall()
+        print(data)
         
         current_total = data[-1][2]
 
@@ -73,8 +77,8 @@ def main():
         
         net_gain = new_total - current_total
 
-        if net_gain < 10:
-            print(f"APPLY MORE!!!. YOU ONLY APPLIED TO {net_gain} TODAY!!!")     
+        if net_gain < 3:
+            send_email(f"""Past Total = {current_total}\nToday's Total = {new_total}\nYOU APPLIED TO {net_gain} JOBS TODAY...APPLY TO MORE""")    
 
     except HttpError as err:
         print(err)
